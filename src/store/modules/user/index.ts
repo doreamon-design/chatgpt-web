@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { UserInfo, UserState } from './helper'
 import { defaultSetting, getLocalState, setLocalState } from './helper'
+import * as doreamon from '../../../doreamon';
 
 export const useUserStore = defineStore('user-store', {
   state: (): UserState => getLocalState(),
@@ -21,18 +22,14 @@ export const useUserStore = defineStore('user-store', {
 
     async setupUserInfo() {
       try {
-        const response = await fetch('/api/user')
-        const data = await response.json()
-        const user = data?.result
-
+        const user = await doreamon.getUser();
+        
         if (user) {
           this.userInfo = {
             avatar: user.avatar,
             name: user.nickname,
             description: user.description,
           };
-
-          (window as any)._user = user
         }
       }
       catch (error) {

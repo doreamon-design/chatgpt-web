@@ -1,5 +1,6 @@
 import axios, { type AxiosResponse } from 'axios'
 import { useAuthStore } from '@/store'
+import * as doreamon from '../../doreamon';
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_GLOB_API_URL,
@@ -18,9 +19,13 @@ service.interceptors.request.use(
 )
 
 service.interceptors.response.use(
-  (response: AxiosResponse): AxiosResponse => {
+  (response: AxiosResponse): Promise<AxiosResponse> => {
+    if (response.status === 401) {
+      return doreamon.handleStatusUnauthorized();
+    }
+
     if (response.status === 200)
-      return response
+      return Promise.resolve(response)
 
     throw new Error(response.status.toString())
   },

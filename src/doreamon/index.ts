@@ -27,14 +27,41 @@ function pageHeartBeat(interval: number) {
   }, interval)
 }
 
-async function checkUser() {
+export async function getUser() {
+  const response = await fetch('/api/user')
+  if (response.status === 401) {
+    return await handleStatusUnauthorized();
+  }
+
+  const data = await response.json()
+  const user = data?.result
+
+  if (user) {
+    (window as any).$user = user
+  }
+
+  return user;
+}
+
+export async function checkUser() {
+  if ((window as any).isCheckingUser) return
+  (window as any).isCheckingUser = true
+
   doreamon.logger.info('page heart beat')
 
   const response = await fetch('/api/user')
   if (response.status === 401) {
-    const rootSelector = document.querySelector('#app')
+    return await handleStatusUnauthorized();
+  }
+}
 
-    rootSelector!.innerHTML = `
+export async function handleStatusUnauthorized(): Promise<any> {
+  if ((window as any).isStatusUnauthorizedHandling) return
+  (window as any).isStatusUnauthorizedHandling = true
+
+  const rootSelector = document.querySelector('#app')
+
+  rootSelector!.innerHTML = `
 <style>
 .loading-wrap {
   display: flex;
@@ -100,8 +127,7 @@ async function checkUser() {
 </div>
 </div>`
 
-    await doreamon.delay(300)
+  await doreamon.delay(300)
 
-    window.location.reload()
-  }
+  window.location.reload()
 }
