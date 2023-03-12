@@ -3,19 +3,23 @@ import doreamon from '@zodash/doreamon'
 import { useUserStore } from '@/store'
 
 export async function setupDoreamon(_app: App) {
-  // setup user
-  const userStore = useUserStore()
-  await userStore.setupUserInfo()
+  doreamon.mount.toWindow()
 
   // setup on page show => user login
   doreamon.dom.page.onPageShow(checkUser)
 
   // page heart beat: 5min
   pageHeartBeat(5 * 60 * 1000)
+
+  // setup user
+  const userStore = useUserStore()
+  await userStore.setupUserInfo()
 }
 
 function pageHeartBeat(interval: number) {
   return setTimeout(async () => {
+    doreamon.logger.info('page heart beat')
+
     try {
       await checkUser()
 
@@ -47,7 +51,7 @@ export async function checkUser() {
   if ((window as any).isCheckingUser) return
   (window as any).isCheckingUser = true
 
-  doreamon.logger.info('page heart beat')
+  doreamon.logger.info('checking user ...')
 
   const response = await fetch('/api/user')
   if (response.status === 401) {
