@@ -19,9 +19,10 @@ service.interceptors.request.use(
 )
 
 service.interceptors.response.use(
-  (response: AxiosResponse): Promise<AxiosResponse> => {
+  async (response: AxiosResponse): Promise<AxiosResponse> => {
     if (response.status === 401) {
-      return doreamon.handleStatusUnauthorized();
+      await doreamon.handleStatusUnauthorized();
+      throw new Error(response.status.toString())
     }
 
     if (response.status === 200)

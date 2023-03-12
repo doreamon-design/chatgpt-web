@@ -39,6 +39,12 @@ function http<T = any>(
 
   const failHandler = (error: Response<Error>) => {
     afterRequest?.()
+
+    // @TODO why here
+    if ((error as any)?.response?.status === 401) {
+      doreamon.handleStatusUnauthorized();
+    }
+
     throw new Error(error?.message || 'Error')
   }
 
