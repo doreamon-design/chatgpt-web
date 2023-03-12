@@ -48,15 +48,21 @@ export async function getUser() {
 }
 
 export async function checkUser() {
-  if ((window as any).isCheckingUser) return
-  (window as any).isCheckingUser = true
+  try {
+    if ((window as any).isCheckingUser) return
+    
+    (window as any).isCheckingUser = true
 
-  doreamon.logger.info('checking user ...')
+    doreamon.logger.info('checking user ...')
 
-  const response = await fetch('/api/user')
-  if (response.status === 401) {
-    return await handleStatusUnauthorized();
+    const response = await fetch('/api/user')
+    if (response.status === 401) {
+      return await handleStatusUnauthorized();
+    }
+  } finally {
+    (window as any).isCheckingUser = false
   }
+
 }
 
 export async function handleStatusUnauthorized(): Promise<any> {
