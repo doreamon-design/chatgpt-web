@@ -8,6 +8,10 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
+    if (doreamon.isStatusUnauthorizedHandling()) {
+      throw new Error(`Handling status unauthorized => reject all requests`);
+    }
+
     const token = useAuthStore().token
     if (token)
       config.headers.Authorization = `Bearer ${token}`

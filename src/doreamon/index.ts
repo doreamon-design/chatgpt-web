@@ -50,7 +50,7 @@ export async function getUser() {
 export async function checkUser() {
   try {
     if ((window as any).isCheckingUser) return
-    
+
     (window as any).isCheckingUser = true
 
     doreamon.logger.info('checking user ...')
@@ -63,6 +63,10 @@ export async function checkUser() {
     (window as any).isCheckingUser = false
   }
 
+}
+
+export function isStatusUnauthorizedHandling() {
+  return (window as any).isStatusUnauthorizedHandling;
 }
 
 export async function handleStatusUnauthorized(): Promise<any> {
