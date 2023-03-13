@@ -33,7 +33,7 @@ COPY /service /app
 RUN pnpm build
 
 # service
-FROM node:lts-alpine
+FROM whatwewant/node:v16-2
 
 RUN npm install pnpm -g
 
