@@ -31,7 +31,7 @@ export function fetchChatAPIProcess<T = any>(
     data: {
       prompt: params.prompt,
       options: params.options,
-      user: (window as any).$user ,
+      user: (window as any).$user,
     },
     signal: params.signal,
     onDownloadProgress: params.onDownloadProgress,

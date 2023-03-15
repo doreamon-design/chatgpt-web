@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from 'axios'
+import * as doreamon from '../../doreamon'
 import { useAuthStore } from '@/store'
-import * as doreamon from '../../doreamon';
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_GLOB_API_URL,
@@ -8,9 +8,8 @@ const service = axios.create({
 
 service.interceptors.request.use(
   (config) => {
-    if (doreamon.isStatusUnauthorizedHandling()) {
-      throw new Error(`Handling status unauthorized => reject all requests`);
-    }
+    if (doreamon.isStatusUnauthorizedHandling())
+      throw new Error('Handling status unauthorized => reject all requests')
 
     const token = useAuthStore().token
     if (token)
@@ -25,7 +24,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   async (response: AxiosResponse): Promise<AxiosResponse> => {
     if (response.status === 401) {
-      await doreamon.handleStatusUnauthorized();
+      await doreamon.handleStatusUnauthorized()
       throw new Error(response.status.toString())
     }
 

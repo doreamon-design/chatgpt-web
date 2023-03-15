@@ -1,7 +1,7 @@
 import type { AxiosProgressEvent, AxiosResponse, GenericAbortSignal } from 'axios'
+import * as doreamon from '../../doreamon'
 import request from './axios'
 import { useAuthStore } from '@/store'
-import * as doreamon from '../../doreamon';
 
 export interface HttpOption {
   url: string
@@ -41,9 +41,8 @@ function http<T = any>(
     afterRequest?.()
 
     // @TODO why here
-    if ((error as any)?.response?.status === 401) {
-      doreamon.handleStatusUnauthorized();
-    }
+    if ((error as any)?.response?.status === 401)
+      doreamon.handleStatusUnauthorized()
 
     throw new Error(error?.message || 'Error')
   }

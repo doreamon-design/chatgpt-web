@@ -33,44 +33,43 @@ function pageHeartBeat(interval: number) {
 
 export async function getUser() {
   const response = await fetch('/api/user')
-  if (response.status === 401) {
-    return await handleStatusUnauthorized();
-  }
+  if (response.status === 401)
+    return await handleStatusUnauthorized()
 
   const data = await response.json()
   const user = data?.result
 
-  if (user) {
+  if (user)
     (window as any).$user = user
-  }
 
-  return user;
+  return user
 }
 
 export async function checkUser() {
   try {
-    if ((window as any).isCheckingUser) return
+    if ((window as any).isCheckingUser)
+      return
 
     (window as any).isCheckingUser = true
 
     doreamon.logger.info('checking user ...')
 
     const response = await fetch('/api/user')
-    if (response.status === 401) {
-      return await handleStatusUnauthorized();
-    }
-  } finally {
+    if (response.status === 401)
+      return await handleStatusUnauthorized()
+  }
+  finally {
     (window as any).isCheckingUser = false
   }
-
 }
 
 export function isStatusUnauthorizedHandling() {
-  return (window as any).isStatusUnauthorizedHandling;
+  return (window as any).isStatusUnauthorizedHandling
 }
 
 export async function handleStatusUnauthorized(): Promise<any> {
-  if ((window as any).isStatusUnauthorizedHandling) return
+  if ((window as any).isStatusUnauthorizedHandling)
+    return
   (window as any).isStatusUnauthorizedHandling = true
 
   const rootSelector = document.querySelector('#app')
