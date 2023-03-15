@@ -37,13 +37,13 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
     const OPENAI_API_MODEL = process.env.OPENAI_API_MODEL
     const model = (typeof OPENAI_API_MODEL === 'string' && OPENAI_API_MODEL.length > 0)
       ? OPENAI_API_MODEL
-      : 'gpt-4-32k'
+      : 'gpt-3.5-turbo'
 
     const options: ChatGPTAPIOptions = {
       apiKey: process.env.OPENAI_API_KEY,
       completionParams: { model },
       debug: false,
-      maxModelTokens: 32768,
+      maxModelTokens: 4096,
     }
 
     if (process.env.OPENAI_API_BASE_URL && process.env.OPENAI_API_BASE_URL.trim().length > 0)
