@@ -1,6 +1,6 @@
 import express from 'express'
 import doreamon from '@zodash/doreamon'
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
 import type { ChatContext, ChatMessage } from './chatgpt'
 import { chatConfig, chatReplyProcess } from './chatgpt'
 import { auth } from './middleware/auth'
@@ -12,10 +12,10 @@ declare module 'express' {
 }
 
 interface User {
-  user_id: string,
-  user_nickname: string,
-  user_avatar: string,
-  user_email: string,
+  user_id: string
+  user_nickname: string
+  user_avatar: string
+  user_email: string
 }
 
 const app = express()
@@ -26,12 +26,13 @@ app.use(express.json())
 
 // @TODO jwt user
 app.use(async (req, res, next) => {
-  if (process.env.SECRET_KEY !== "") {
+  if (process.env.SECRET_KEY !== '') {
     const token = req.get('x-connect-token')
-    if (token != '') {
+    if (token !== '') {
       try {
         (req as any).$user = jwt.verify(token, process.env.SECRET_KEY)
-      } catch (err) {
+      }
+      catch (err) {
         console.error('jwt verify error:', err)
 
         throw new Error('Invalid JWT Token')
@@ -53,7 +54,7 @@ router.post('/chat-process', auth, async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
   doreamon.logger.info(`[${req.method} ${req.path}] ${req.get('user-agent')}`)
 
-  const jwtUser: User = (req as any).$user;
+  const jwtUser: User = (req as any).$user
 
   const {
     prompt,
