@@ -2,8 +2,9 @@ import express from 'express'
 import doreamon from '@zodash/doreamon'
 import jwt from 'jsonwebtoken'
 import type { ChatContext, ChatMessage } from './chatgpt'
-import { chatConfig, chatReplyProcess } from './chatgpt'
+import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import { auth } from './middleware/auth'
+import { isNotEmptyString } from './utils/is'
 
 declare module 'express' {
   export interface Request {
@@ -26,7 +27,7 @@ app.use(express.json())
 
 // @TODO jwt user
 app.use(async (req, res, next) => {
-  if (process.env.SECRET_KEY !== '') {
+  if (process.env.SECRET_KEY) {
     const token = req.get('x-connect-token')
     if (token !== '') {
       try {
@@ -45,7 +46,7 @@ app.use(async (req, res, next) => {
 
 app.all('*', (_, res, next) => {
   res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.header('Access-Control-Allow-Headers', 'authorization, Content-Type')
   res.header('Access-Control-Allow-Methods', '*')
   next()
 })
@@ -109,8 +110,8 @@ router.post('/config', async (req, res) => {
 router.post('/session', async (req, res) => {
   try {
     const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY
-    const hasAuth = typeof AUTH_SECRET_KEY === 'string' && AUTH_SECRET_KEY.length > 0
-    res.send({ status: 'Success', message: '', data: { auth: hasAuth } })
+    const hasAuth = isNotEmptyString(AUTH_SECRET_KEY)
+    res.send({ status: 'Success', message: '', data: { auth: hasAuth, model: currentModel() } })
   }
   catch (error) {
     res.send({ status: 'Fail', message: error.message, data: null })

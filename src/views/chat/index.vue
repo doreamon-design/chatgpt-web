@@ -416,6 +416,7 @@ const searchOptions = computed(() => {
     return []
   }
 })
+
 // value反渲染key
 const renderOption = (option: { label: string }) => {
   for (const i of promptTemplate.value) {
@@ -527,7 +528,7 @@ onUnmounted(() => {
                 v-model:value="prompt"
                 type="textarea"
                 :placeholder="placeholder"
-                :autosize="{ minRows: 1, maxRows: 2 }"
+                :autosize="{ minRows: 1, maxRows: isMobile ? 4 : 8 }"
                 @input="handleInput"
                 @focus="handleFocus"
                 @blur="handleBlur"
