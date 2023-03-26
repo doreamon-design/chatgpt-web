@@ -1,4 +1,4 @@
-import type { User } from '../types'
+import type { Conversation, User } from '../types'
 import { Usage } from './entity/usage'
 import { AppDataSource } from './data-source'
 import { Message } from './entity/message'
@@ -32,8 +32,13 @@ export class Database {
     await AppDataSource.manager.save(usage)
   }
 
-  public async createMessage(prompt: string, user?: User): Promise<Message> {
+  public async createMessage(prompt: string, conversation?: Conversation, user?: User): Promise<Message> {
     const message = new Message()
+    if (conversation) {
+      message.conversation_id = conversation.conversationId || ''
+      message.conversation_name = conversation.conversationName || ''
+      message.parent_message_id = conversation.parentMessageId || ''
+    }
     if (user) {
       message.user_id = user.user_id
       message.user_nickname = user.user_nickname
@@ -46,8 +51,10 @@ export class Database {
     return await AppDataSource.manager.save(message)
   }
 
-  public async saveMessage(message: Message, answer: string): Promise<Message> {
+  public async saveMessage(message: Message, answer: string, model: string, answer_id: string): Promise<Message> {
     message.answer = answer
+    message.model = model
+    message.answer_id = answer_id
     message.updated_at = new Date()
 
     return await AppDataSource.manager.save(message)

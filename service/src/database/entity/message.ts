@@ -17,8 +17,23 @@ export class Message {
   @Column('text', { nullable: true })
   user_email: string
 
+  @Column('text', { nullable: true })
+  conversation_id: string
+
+  @Column('text', { nullable: true })
+  conversation_name: string
+
+  @Column('text', { nullable: true })
+  parent_message_id: string
+
   @Column('text')
   prompt: string
+
+  @Column('text', { nullable: true })
+  model: string
+
+  @Column('text', { nullable: true })
+  answer_id: string
 
   @Column('text', { nullable: true })
   answer: string
