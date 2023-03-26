@@ -24,3 +24,10 @@ export interface ModelConfig {
 }
 
 export type ApiModel = 'ChatGPTAPI' | 'ChatGPTUnofficialProxyAPI' | undefined
+
+export interface User {
+  user_id: string
+  user_nickname: string
+  user_avatar: string
+  user_email: string
+}

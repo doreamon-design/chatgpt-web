@@ -6,17 +6,14 @@ import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import { auth } from './middleware/auth'
 import { isNotEmptyString } from './utils/is'
 
+import type { User } from './types'
+
+import { db } from './database'
+
 declare module 'express' {
   export interface Request {
     user: User
   }
-}
-
-interface User {
-  user_id: string
-  user_nickname: string
-  user_avatar: string
-  user_email: string
 }
 
 const app = express()
@@ -73,11 +70,18 @@ router.post('/chat-process', auth, async (req, res) => {
     let firstChunk = true
     doreamon.logger.info(`${user?.nickname}(jwt: ${jwtUser?.user_nickname}) ask ChatGPT: ${prompt}`)
 
-    await chatReplyProcess(prompt, options, (chat: ChatMessage) => {
+    const message = await db.createMessage(prompt, jwtUser)
+
+    await db.countUsage(jwtUser)
+
+    const response = await chatReplyProcess(prompt, options, (chat: ChatMessage) => {
       // doreamon.logger.info(`ChatGPT answer ${user?.nickname}: ${prompt}`);
       res.write(firstChunk ? JSON.stringify(chat) : `\n${JSON.stringify(chat)}`)
       firstChunk = false
     })
+
+    if ((response?.data as any)?.text)
+      await db.saveMessage(message, (response.data as any).text)
 
     doreamon.logger.info(`ChatGPT answer ${user?.nickname}(jwt: ${jwtUser?.user_nickname}): success for prompt => ${prompt}`)
   }
@@ -137,4 +141,18 @@ router.post('/verify', async (req, res) => {
 app.use('', router)
 app.use('/api', router)
 
-app.listen(3002, () => globalThis.console.log('Server is running on port 3002'))
+if (process.env.DB_HOST) {
+  db
+    .setup()
+    .then(async () => {
+      app.listen(3002, () => {
+        globalThis.console.log('Server is running on port 3002')
+      })
+    })
+    .catch(error => globalThis.console.log(error))
+}
+else {
+  app.listen(3002, () => {
+    globalThis.console.log('Server is running on port 3002')
+  })
+}
