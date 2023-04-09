@@ -118,6 +118,11 @@ function handleImportButtonClick(): void {
   if (fileInput)
     fileInput.click()
 }
+
+function logout(): void {
+  const currentPath = window.location.pathname + window.location.search;
+  window.location.href = `/logout?from=${encodeURIComponent(currentPath)}`;
+}
 </script>
 
 <template>
@@ -126,35 +131,32 @@ function handleImportButtonClick(): void {
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.avatarLink') }}</span>
         <div class="flex-1">
-          <NInput v-model:value="avatar" placeholder="" />
+          <NInput v-model:value="avatar" placeholder="" :disabled="true" />
         </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ avatar })">
-          {{ $t('common.save') }}
-        </NButton>
+        <!-- <NButton size="tiny" text type="primary" @click="updateUserInfo({ avatar })">
+            {{ $t('common.save') }}
+          </NButton> -->
       </div>
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.name') }}</span>
         <div class="w-[200px]">
-          <NInput v-model:value="name" placeholder="" />
+          <NInput v-model:value="name" placeholder="" :disabled="true" />
         </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ name })">
-          {{ $t('common.save') }}
-        </NButton>
+        <!-- <NButton size="tiny" text type="primary" @click="updateUserInfo({ name })">
+            {{ $t('common.save') }}
+          </NButton> -->
       </div>
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.description') }}</span>
         <div class="flex-1">
-          <NInput v-model:value="description" placeholder="" />
+          <NInput v-model:value="description" placeholder="" :disabled="true" />
         </div>
-        <NButton size="tiny" text type="primary" @click="updateUserInfo({ description })">
-          {{ $t('common.save') }}
-        </NButton>
+        <!-- <NButton size="tiny" text type="primary" @click="updateUserInfo({ description })">
+            {{ $t('common.save') }}
+          </NButton> -->
       </div>
 
-      <div
-        class="flex items-center space-x-4"
-        :class="isMobile && 'items-start'"
-      >
+      <div class="flex items-center space-x-4" :class="isMobile && 'items-start'">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.chatHistory') }}</span>
 
         <div class="flex flex-wrap items-center gap-4">
@@ -190,11 +192,7 @@ function handleImportButtonClick(): void {
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.theme') }}</span>
         <div class="flex flex-wrap items-center gap-4">
           <template v-for="item of themeOptions" :key="item.key">
-            <NButton
-              size="small"
-              :type="item.key === theme ? 'primary' : undefined"
-              @click="appStore.setTheme(item.key)"
-            >
+            <NButton size="small" :type="item.key === theme ? 'primary' : undefined" @click="appStore.setTheme(item.key)">
               <template #icon>
                 <SvgIcon :icon="item.icon" />
               </template>
@@ -205,18 +203,23 @@ function handleImportButtonClick(): void {
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.language') }}</span>
         <div class="flex flex-wrap items-center gap-4">
-          <NSelect
-            style="width: 140px"
-            :value="language"
-            :options="languageOptions"
-            @update-value="value => appStore.setLanguage(value)"
-          />
+          <NSelect style="width: 140px" :value="language" :options="languageOptions"
+            @update-value="value => appStore.setLanguage(value)" />
         </div>
       </div>
+      <!-- <div class="flex items-center space-x-4">
+          <span class="flex-shrink-0 w-[100px]">{{ $t('setting.resetUserInfo') }}</span>
+          <NButton size="small" @click="handleReset">
+            {{ $t('common.reset') }}
+          </NButton>
+        </div> -->
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]">{{ $t('setting.resetUserInfo') }}</span>
-        <NButton size="small" @click="handleReset">
-          {{ $t('common.reset') }}
+        <span class="flex-shrink-0 w-[100px]"></span>
+        <NButton size="small" @click="logout">
+          <template #icon>
+            <SvgIcon icon="majesticons:logout-line" />
+          </template>
+          {{ $t('common.logout') }}
         </NButton>
       </div>
     </div>
