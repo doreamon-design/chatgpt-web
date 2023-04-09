@@ -19,7 +19,9 @@ declare module 'express' {
 const app = express()
 const router = express.Router()
 
-app.use(express.static('public'))
+app.use(express.static('public', {
+  maxAge: process.env.NODE_ENV === 'production' ? 365 * 24 * 60 * 60 * 1000 : 0,
+}))
 app.use(express.json())
 
 // @TODO jwt user
