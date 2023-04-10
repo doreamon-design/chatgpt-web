@@ -1,4 +1,5 @@
 import express from 'express'
+import path from 'path'
 import doreamon from '@zodash/doreamon'
 import jwt from 'jsonwebtoken'
 import type { ChatContext, ChatMessage } from './chatgpt'
@@ -21,6 +22,7 @@ const router = express.Router()
 
 app.use(express.static('public', {
   maxAge: process.env.NODE_ENV === 'production' ? 365 * 24 * 60 * 60 * 1000 : 0,
+  index: false,
 }))
 app.use(express.json())
 
@@ -150,6 +152,10 @@ router.post('/verify', async (req, res) => {
 
 app.use('', router)
 app.use('/api', router)
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index.html'))
+})
 
 if (process.env.DB_HOST) {
   db
