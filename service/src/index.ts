@@ -72,7 +72,7 @@ router.post('/chat-process', auth, async (req, res) => {
 
   try {
     let firstChunk = true
-    doreamon.logger.info(`${user?.nickname}(jwt: ${jwtUser?.user_nickname}) ask ChatGPT: ${prompt}`)
+    doreamon.logger.debug(`${user?.nickname}(jwt: ${jwtUser?.user_nickname}) ask ChatGPT: ${prompt}`)
 
     const message = await db.createMessage(prompt, options, jwtUser)
 
@@ -95,7 +95,7 @@ router.post('/chat-process', auth, async (req, res) => {
       )
     }
 
-    doreamon.logger.info(`ChatGPT answer ${user?.nickname}(jwt: ${jwtUser?.user_nickname}): success for prompt => ${prompt}`)
+    doreamon.logger.debug(`ChatGPT answer ${user?.nickname}(jwt: ${jwtUser?.user_nickname}): success for prompt => ${prompt}`)
   }
   catch (error) {
     doreamon.logger.error(`ChatGPT answer ${user?.nickname}(jwt: ${jwtUser?.user_nickname}): error for prompt => ${prompt}, error detail:`, error)
