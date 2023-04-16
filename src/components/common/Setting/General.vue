@@ -57,6 +57,7 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
   { label: '简体中文', key: 'zh-CN', value: 'zh-CN' },
   { label: '繁體中文', key: 'zh-TW', value: 'zh-TW' },
   { label: 'English', key: 'en-US', value: 'en-US' },
+  { label: '한국어', key: 'ko-KR', value: 'ko-KR' },
 ]
 
 // function updateUserInfo(options: Partial<UserInfo>) {
@@ -155,8 +156,10 @@ function logout(): void {
             {{ $t('common.save') }}
           </NButton> -->
       </div>
-
-      <div class="flex items-center space-x-4" :class="isMobile && 'items-start'">
+      <div
+        class="flex items-center space-x-4"
+        :class="isMobile && 'items-start'"
+      >
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.chatHistory') }}</span>
 
         <div class="flex flex-wrap items-center gap-4">

@@ -12,6 +12,7 @@ interface Props {
   error?: boolean
   text?: string
   loading?: boolean
+  asRawText?: boolean
 }
 
 const props = defineProps<Props>()
@@ -43,13 +44,14 @@ const wrapClass = computed(() => {
     isMobile.value ? 'p-2' : 'px-3 py-2',
     props.inversion ? 'bg-[#d2f9d1]' : 'bg-[#f4f6f8]',
     props.inversion ? 'dark:bg-[#a1dc95]' : 'dark:bg-[#1e1e20]',
+    props.inversion ? 'message-request' : 'message-reply',
     { 'text-red-500': props.error },
   ]
 })
 
 const text = computed(() => {
   const value = props.text ?? ''
-  if (!props.inversion)
+  if (!props.asRawText)
     return mdi.render(value)
   return value
 })
@@ -63,15 +65,16 @@ defineExpose({ textRef })
 
 <template>
   <div class="text-black" :class="wrapClass">
-    <template v-if="loading">
-      <span class="dark:text-white w-[4px] h-[20px] block animate-blink" />
-    </template>
-    <template v-else>
-      <div ref="textRef" class="leading-relaxed break-words">
-        <div v-if="!inversion" class="markdown-body" v-html="text" />
+    <div ref="textRef" class="leading-relaxed break-words">
+      <div v-if="!inversion">
+        <div v-if="!asRawText" class="markdown-body" v-html="text" />
         <div v-else class="whitespace-pre-wrap" v-text="text" />
       </div>
-    </template>
+      <div v-else class="whitespace-pre-wrap" v-text="text" />
+      <template v-if="loading">
+        <span class="dark:text-white w-[4px] h-[20px] block animate-blink" />
+      </template>
+    </div>
   </div>
 </template>
 
