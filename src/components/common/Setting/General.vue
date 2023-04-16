@@ -120,8 +120,8 @@ function handleImportButtonClick(): void {
 }
 
 function logout(): void {
-  const currentPath = window.location.pathname + window.location.search;
-  window.location.href = `/logout?from=${encodeURIComponent(currentPath)}`;
+  const currentPath = window.location.pathname + window.location.search
+  window.location.href = `/logout?from=${encodeURIComponent(currentPath)}`
 }
 </script>
 
@@ -203,8 +203,10 @@ function logout(): void {
       <div class="flex items-center space-x-4">
         <span class="flex-shrink-0 w-[100px]">{{ $t('setting.language') }}</span>
         <div class="flex flex-wrap items-center gap-4">
-          <NSelect style="width: 140px" :value="language" :options="languageOptions"
-            @update-value="value => appStore.setLanguage(value)" />
+          <NSelect
+            style="width: 140px" :value="language" :options="languageOptions"
+            @update-value="value => appStore.setLanguage(value)"
+          />
         </div>
       </div>
       <!-- <div class="flex items-center space-x-4">
@@ -214,7 +216,7 @@ function logout(): void {
           </NButton>
         </div> -->
       <div class="flex items-center space-x-4">
-        <span class="flex-shrink-0 w-[100px]"></span>
+        <span class="flex-shrink-0 w-[100px]" />
         <NButton size="small" @click="logout">
           <template #icon>
             <SvgIcon icon="majesticons:logout-line" />
