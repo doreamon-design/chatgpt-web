@@ -2,12 +2,12 @@ import path from 'path'
 import express from 'express'
 import doreamon from '@zodash/doreamon'
 import jwt from 'jsonwebtoken'
-import type { ChatContext, ChatMessage } from './chatgpt'
+import type { ChatMessage } from './chatgpt'
+import type { RequestProps, User } from './types'
 import { chatConfig, chatReplyProcess, currentModel } from './chatgpt'
 import { auth } from './middleware/auth'
+import { limiter } from './middleware/limiter'
 import { isNotEmptyString } from './utils/is'
-
-import type { User } from './types'
 
 import { db } from './database'
 
@@ -52,7 +52,7 @@ app.all('*', (_, res, next) => {
   next()
 })
 
-router.post('/chat-process', auth, async (req, res) => {
+router.post('/chat-process', [auth, limiter], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
   doreamon.logger.info(`[${req.method} ${req.path}] ${req.get('user-agent')}`)
 
@@ -62,26 +62,29 @@ router.post('/chat-process', auth, async (req, res) => {
     prompt,
     options = {},
     user,
-  } = req.body as {
-    prompt: string
-    options?: ChatContext
-    user?: {
-      nickname: string
-    }
-  }
+    systemMessage,
+    temperature,
+    top_p,
+  } = req.body as RequestProps
 
   try {
-    let firstChunk = true
     doreamon.logger.debug(`${user?.nickname}(jwt: ${jwtUser?.user_nickname}) ask ChatGPT: ${prompt}`)
 
     const message = await db.createMessage(prompt, options, jwtUser)
 
     await db.countUsage(jwtUser)
 
-    const response = await chatReplyProcess(prompt, options, (chat: ChatMessage) => {
-      // doreamon.logger.info(`ChatGPT answer ${user?.nickname}: ${prompt}`);
-      res.write(firstChunk ? JSON.stringify(chat) : `\n${JSON.stringify(chat)}`)
-      firstChunk = false
+    let firstChunk = true
+    const response = await chatReplyProcess({
+      message: prompt,
+      lastContext: options,
+      process: (chat: ChatMessage) => {
+        res.write(firstChunk ? JSON.stringify(chat) : `\n${JSON.stringify(chat)}`)
+        firstChunk = false
+      },
+      systemMessage,
+      temperature,
+      top_p,
     })
 
     // console.log(JSON.stringify(response, null, 2));
@@ -113,7 +116,7 @@ router.post('/chat-process', auth, async (req, res) => {
   }
 })
 
-router.post('/config', async (req, res) => {
+router.post('/config', auth, async (req, res) => {
   try {
     const response = await chatConfig()
     res.send(response)
@@ -152,6 +155,7 @@ router.post('/verify', async (req, res) => {
 
 app.use('', router)
 app.use('/api', router)
+app.set('trust proxy', 1)
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index.html'))
