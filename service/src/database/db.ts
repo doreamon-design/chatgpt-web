@@ -27,6 +27,9 @@ export class Database {
       })
     }
 
+    if (!usage.user_nickname)
+      usage.user_nickname = user.user_nickname
+
     usage.count += 1
     usage.updated_at = new Date()
     await AppDataSource.manager.save(usage)
