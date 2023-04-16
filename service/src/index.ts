@@ -54,9 +54,9 @@ app.all('*', (_, res, next) => {
 
 router.post('/chat-process', [auth, limiter], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
-  doreamon.logger.info(`[${req.method} ${req.path}] ${req.get('user-agent')}`)
-
   const jwtUser: User = (req as any).$user
+
+  doreamon.logger.info(`[user: ${jwtUser?.user_nickname}][${req.method} ${req.path}] ${req.get('user-agent')}`)
 
   const {
     prompt,

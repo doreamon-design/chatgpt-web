@@ -16,7 +16,7 @@
   "scripts": {
     "start": "esno ./src/index.ts",
     "dev": "esno watch ./src/index.ts",
-    "prod": "NODE_ENV=production esno ./build/index.mjs",
+    "prod": "NODE_ENV=production esno ./build/index.js",
     "build": "pnpm clean && tsup",
     "clean": "rimraf build",
     "lint": "eslint .",

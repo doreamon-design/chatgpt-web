@@ -26,7 +26,7 @@ const ErrorCodeMessage: Record<string, string> = {
 }
 
 const timeoutMs: number = !isNaN(+process.env.TIMEOUT_MS) ? +process.env.TIMEOUT_MS : 100 * 1000
-const disableDebug: boolean = process.env.OPENAI_API_DISABLE_DEBUG === 'true'
+const disableDebug: boolean = process.env.OPENAI_API_ENABLE_DEBUG !== 'true'
 
 let apiModel: ApiModel
 const model = isNotEmptyString(process.env.OPENAI_API_MODEL) ? process.env.OPENAI_API_MODEL : 'gpt-3.5-turbo'
@@ -168,15 +168,15 @@ async function chatReplyProcess(options: RequestOptions) {
 //   }
 // }
 
-function formatDate(): string[] {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = today.getMonth() + 1
-  const lastDay = new Date(year, month, 0)
-  const formattedFirstDay = `${year}-${month.toString().padStart(2, '0')}-01`
-  const formattedLastDay = `${year}-${month.toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`
-  return [formattedFirstDay, formattedLastDay]
-}
+// function formatDate(): string[] {
+//   const today = new Date()
+//   const year = today.getFullYear()
+//   const month = today.getMonth() + 1
+//   const lastDay = new Date(year, month, 0)
+//   const formattedFirstDay = `${year}-${month.toString().padStart(2, '0')}-01`
+//   const formattedLastDay = `${year}-${month.toString().padStart(2, '0')}-${lastDay.getDate().toString().padStart(2, '0')}`
+//   return [formattedFirstDay, formattedLastDay]
+// }
 
 async function chatConfig() {
   // const usage = await fetchUsage()

@@ -9,6 +9,9 @@ export class Database {
   }
 
   public async countUsage(user?: User) {
+    if (!process.env.DB_HOST)
+      return
+
     if (!user?.user_id)
       return
 
@@ -36,6 +39,9 @@ export class Database {
   }
 
   public async createMessage(prompt: string, conversation?: Conversation, user?: User): Promise<Message> {
+    if (!process.env.DB_HOST)
+      return
+
     const message = new Message()
     if (conversation) {
       message.conversation_id = conversation.conversationId || ''
@@ -55,6 +61,9 @@ export class Database {
   }
 
   public async saveMessage(message: Message, answer: string, model: string, answer_id: string): Promise<Message> {
+    if (!process.env.DB_HOST)
+      return
+
     message.answer = answer
     message.model = model
     message.answer_id = answer_id
