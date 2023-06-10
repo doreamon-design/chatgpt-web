@@ -44,6 +44,10 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
 
     const options: ChatGPTAPIOptions = {
       apiKey: process.env.OPENAI_API_KEY,
+      apiType: process.env.OPENAI_API_TYPE as 'azure',
+      azureResource: process.env.OPENAI_AZURE_RESOURCE,
+      azureDeployment: process.env.OPENAI_AZURE_DEPLOYMENT,
+      azureAPIVersion: process.env.OPENAI_AZURE_API_VERSION,
       completionParams: { model },
       debug: !disableDebug,
     }

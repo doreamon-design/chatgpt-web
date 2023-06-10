@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
-import { NButton, NLayoutSider } from 'naive-ui'
+import { NLayoutSider } from 'naive-ui'
 import doreamon from '@zodash/doreamon'
 import List from './List.vue'
 import Footer from './Footer.vue'
@@ -71,17 +71,27 @@ watch(
     <div class="flex flex-col h-full" :style="mobileSafeArea">
       <main class="flex flex-col flex-1 min-h-0">
         <div class="p-4">
-          <NButton dashed block @click="handleAdd">
+          <!-- <NButton dashed block @click="handleAdd">
             {{ $t('chat.newChatButton') }}
-          </NButton>
+          </NButton> -->
+          <button
+            class="new-chat-btn"
+            @click="handleAdd"
+          >
+            {{ $t('chat.newChatButton') }}
+          </button>
         </div>
         <div class="flex-1 min-h-0 pb-4 overflow-hidden">
           <List />
         </div>
         <div class="p-4">
-          <NButton block @click="show = true">
+          <!-- <NButton block @click="show = true">
             {{ $t('store.siderButton') }}
-          </NButton>
+          </NButton> -->
+
+          <button class="prompt-store-btn" @click="show = true">
+            {{ $t('store.siderButton') }}
+          </button>
         </div>
       </main>
       <Footer />
@@ -92,3 +102,29 @@ watch(
   </template>
   <PromptStore v-model:visible="show" />
 </template>
+
+<style lang="less" scoped>
+  .new-chat-btn {
+    height: 34px;
+    width: 100%;
+    border: 1px dashed #d9d9d9;
+    border-radius: 4px;
+
+    &:hover {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+
+  .prompt-store-btn {
+    height: 34px;
+    width: 100%;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+
+    &:hover {
+      color: #40a9ff;
+      border-color: #40a9ff;
+    }
+  }
+</style>

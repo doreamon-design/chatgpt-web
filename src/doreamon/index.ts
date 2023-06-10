@@ -95,7 +95,7 @@ export async function handleStatusUnauthorized(): Promise<any> {
   width: 0.8em;
   height: 0.8em;
   border-radius: 50%;
-  background-color: #4b9e5f;
+  background-color: #1e76f0;
 }
 
 .balls div:nth-of-type(1) {
