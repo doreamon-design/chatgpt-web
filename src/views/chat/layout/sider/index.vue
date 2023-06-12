@@ -44,6 +44,14 @@ const mobileSafeArea = computed(() => {
   return {}
 })
 
+const isInIframe = computed(() => {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+})
+
 watch(
   isMobile,
   (val) => {
@@ -94,7 +102,7 @@ watch(
           </button>
         </div>
       </main>
-      <Footer />
+      <Footer v-if="!isInIframe" />
     </div>
   </NLayoutSider>
   <template v-if="isMobile">
