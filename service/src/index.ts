@@ -56,8 +56,6 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
   res.setHeader('Content-type', 'application/octet-stream')
   const jwtUser: User = (req as any).$user
 
-  doreamon.logger.info(`[user: ${jwtUser?.user_nickname}][${req.method} ${req.path}] ${req.get('user-agent')}`)
-
   const {
     prompt,
     options = {},
@@ -67,8 +65,10 @@ router.post('/chat-process', [auth, limiter], async (req, res) => {
     top_p,
   } = req.body as RequestProps
 
+  doreamon.logger.info(`[user: ${user?.nickname}(jwt: ${jwtUser?.user_nickname ?? jwtUser?.nickname})][${req.method} ${req.path}] ${req.get('user-agent')}`)
+
   try {
-    doreamon.logger.debug(`${user?.nickname}(jwt: ${jwtUser?.user_nickname}) ask ChatGPT: ${prompt}`)
+    doreamon.logger.debug(`${user?.nickname}(jwt: ${jwtUser?.user_nickname ?? jwtUser?.nickname}) ask ChatGPT: ${prompt}`)
 
     const message = await db.createMessage(prompt, options, jwtUser)
 

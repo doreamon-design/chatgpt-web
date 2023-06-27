@@ -42,6 +42,8 @@ export interface User {
   user_nickname: string
   user_avatar: string
   user_email: string
+  //
+  nickname: string
 }
 
 export type Conversation = ChatContext
