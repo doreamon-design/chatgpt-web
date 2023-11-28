@@ -1,7 +1,6 @@
 {
   "name": "chatgpt-web",
-  "version": "2.11.1",
-  "private": false,
+  "version": "2.11.2",
   "description": "ChatGPT Web",
   "keywords": [
     "chatgpt-web",
@@ -68,5 +67,6 @@
     "vite": "^4.2.0",
     "vite-plugin-pwa": "^0.14.4",
     "vue-tsc": "^1.2.0"
-  }
+  },
+  "private": false
 }
