@@ -59,9 +59,20 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
         options.maxModelTokens = 32768
         options.maxResponseTokens = 8192
       }
+      // if use GPT-4 Turbo
+      else if (model.toLowerCase().includes('1106-preview')) {
+        options.maxModelTokens = 128000
+        options.maxResponseTokens = 4096
+      }
       else {
         options.maxModelTokens = 8192
         options.maxResponseTokens = 2048
+      }
+    }
+    else if (model.toLowerCase().includes('gpt-3.5')) {
+      if (model.toLowerCase().includes('16k')) {
+        options.maxModelTokens = 16384
+        options.maxResponseTokens = 4096
       }
     }
 
@@ -84,7 +95,7 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
   else {
     const options: ChatGPTUnofficialProxyAPIOptions = {
       accessToken: process.env.OPENAI_ACCESS_TOKEN,
-      apiReverseProxyUrl: isNotEmptyString(process.env.API_REVERSE_PROXY) ? process.env.API_REVERSE_PROXY : 'https://bypass.churchless.tech/api/conversation',
+      apiReverseProxyUrl: isNotEmptyString(process.env.API_REVERSE_PROXY) ? process.env.API_REVERSE_PROXY : 'https://ai.fakeopen.com/api/conversation',
       model,
       debug: !disableDebug,
     }

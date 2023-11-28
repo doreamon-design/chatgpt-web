@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
-import { NLayoutSider } from 'naive-ui'
 import doreamon from '@zodash/doreamon'
+import { NLayoutSider, useDialog } from 'naive-ui'
 import List from './List.vue'
 import Footer from './Footer.vue'
 import { useAppStore, useChatStore } from '@/store'
@@ -11,6 +11,8 @@ import { PromptStore } from '@/components/common'
 
 const appStore = useAppStore()
 const chatStore = useChatStore()
+
+const dialog = useDialog()
 
 const { isMobile } = useBasicLayout()
 const show = ref(false)
@@ -46,9 +48,10 @@ const mobileSafeArea = computed(() => {
 
 const isInIframe = computed(() => {
   try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
+    return window.self !== window.top
+  }
+  catch (e) {
+    return true
   }
 })
 
@@ -106,7 +109,7 @@ watch(
     </div>
   </NLayoutSider>
   <template v-if="isMobile">
-    <div v-show="!collapsed" class="fixed inset-0 z-40 bg-black/40" @click="handleUpdateCollapsed" />
+    <div v-show="!collapsed" class="fixed inset-0 z-40 w-full h-full bg-black/40" @click="handleUpdateCollapsed" />
   </template>
   <PromptStore v-model:visible="show" />
 </template>

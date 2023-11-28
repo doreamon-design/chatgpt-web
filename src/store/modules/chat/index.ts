@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import doreamon from '@zodash/doreamon'
-import { getLocalState, setLocalState } from './helper'
+import { defaultState, getLocalState, setLocalState } from './helper'
 import { router } from '@/router'
 
 export const useChatStore = defineStore('chat-store', {
@@ -183,7 +183,12 @@ export const useChatStore = defineStore('chat-store', {
       }
     },
 
-    async reloadRoute(uuid?: string) {
+    clearHistory() {
+      this.$state = { ...defaultState() }
+      this.recordState()
+    },
+
+    async reloadRoute(uuid?: string | number) {
       this.recordState()
       await router.push({ name: 'Chat', params: { uuid } })
     },
