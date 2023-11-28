@@ -1,15 +1,14 @@
 {
   "name": "chatgpt-web",
-  "version": "2.10.9",
-  "private": false,
+  "version": "2.10.10",
   "description": "ChatGPT Web",
-  "author": "ChenZhaoYu <chenzhaoyu1994@gmail.com>",
   "keywords": [
     "chatgpt-web",
     "chatgpt",
     "chatbot",
     "vue"
   ],
+  "author": "ChenZhaoYu <chenzhaoyu1994@gmail.com>",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
@@ -21,6 +20,11 @@
     "bootstrap": "pnpm install && pnpm run common:prepare",
     "common:cleanup": "rimraf node_modules && rimraf pnpm-lock.yaml",
     "common:prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue}": [
+      "pnpm lint:fix"
+    ]
   },
   "dependencies": {
     "@traptitech/markdown-it-katex": "^3.6.0",
@@ -64,9 +68,5 @@
     "vite-plugin-pwa": "^0.14.4",
     "vue-tsc": "^1.2.0"
   },
-  "lint-staged": {
-    "*.{ts,tsx,vue}": [
-      "pnpm lint:fix"
-    ]
-  }
+  "private": false
 }
