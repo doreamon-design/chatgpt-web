@@ -66,7 +66,7 @@ let api: ChatGPTAPI | ChatGPTUnofficialProxyAPI
     }
 
     if (isNotEmptyString(OPENAI_API_BASE_URL))
-      options.apiBaseUrl = `${OPENAI_API_BASE_URL}/v1`
+      options.apiBaseUrl = `${OPENAI_API_BASE_URL}`
 
     setupProxy(options)
 
@@ -146,7 +146,7 @@ async function chatReplyProcess(options: RequestOptions) {
 //   const [startDate, endDate] = formatDate()
 
 //   // 每月使用量
-//   const urlUsage = `${API_BASE_URL}/v1/dashboard/billing/usage?start_date=${startDate}&end_date=${endDate}`
+//   const urlUsage = `${API_BASE_URL}/dashboard/billing/usage?start_date=${startDate}&end_date=${endDate}`
 
 //   const headers = {
 //     'Authorization': `Bearer ${OPENAI_API_KEY}`,
