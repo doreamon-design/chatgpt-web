@@ -2,7 +2,7 @@
 import type { CSSProperties } from 'vue'
 import { computed, ref, watch } from 'vue'
 import doreamon from '@zodash/doreamon'
-import { NLayoutSider, useDialog } from 'naive-ui'
+import { NLayoutSider } from 'naive-ui'
 import List from './List.vue'
 import Footer from './Footer.vue'
 import { useAppStore, useChatStore } from '@/store'
@@ -12,7 +12,7 @@ import { PromptStore } from '@/components/common'
 const appStore = useAppStore()
 const chatStore = useChatStore()
 
-const dialog = useDialog()
+// const dialog = useDialog()
 
 const { isMobile } = useBasicLayout()
 const show = ref(false)
